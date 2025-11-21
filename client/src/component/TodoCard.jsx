@@ -1,10 +1,5 @@
 export default function TodoCard({ todo, onEdit, onDelete, onToggle }) {
 
-  // limit description
-  const shortDesc =
-    todo.description.length > 150
-      ? todo.description.substring(0, 150) + "..."
-      : todo.description;
 
   return (
     <div className="bg-white p-5 rounded-xl shadow hover:shadow-xl transition flex flex-col justify-between">
@@ -26,8 +21,8 @@ export default function TodoCard({ todo, onEdit, onDelete, onToggle }) {
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 text-sm mt-2">
-        {shortDesc}
+      <p className="text-gray-600 text-l mt-2">
+        {todo.description}
       </p>
 
       {/* Category + Status + Date in ONE LINE */}

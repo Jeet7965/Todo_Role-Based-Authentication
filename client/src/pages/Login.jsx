@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/urlApi";
 import toast from "react-hot-toast";
 
@@ -17,7 +17,7 @@ export default function Login() {
             const resp = await api.post("/auth/login", form)
             if (resp.status === 200 && resp.data.token) {
 
-                login(resp.data.token, resp.data.user);
+                login(resp.data.token,resp.data.user);
 
                 if (resp.data.user.role === "admin") {
                     navigate("/admin");
@@ -28,7 +28,7 @@ export default function Login() {
                 } 
 
             }
-        } catch (error) {
+        } catch (err) {
 
            toast.error(err.response?.data?.message || "Something went wrong!");
         }
@@ -61,6 +61,9 @@ export default function Login() {
 
                 <p className="text-center text-sm">
                     Need an account? <a href="/register" className="text-blue-600">Register</a>
+                </p>
+                <p className="text-center text-sm ">
+                    <Link to="/forgot-password" className="text-red-600">Forgate Password</Link>
                 </p>
             </form>
         </div>

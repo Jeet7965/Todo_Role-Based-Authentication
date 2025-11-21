@@ -10,57 +10,61 @@ import CreateTodo from "./pages/CreateTodo";
 import AdminRoute from "./Routes/AdminRoutes";
 import AllTodos from "./pages/AllTodos";
 import AdminLayout from "./component/AdminLayout";
+import ForgatePage from "./pages/ForgatePage";
+import ResetPasswordPage from "./pages/ResetPassPage";
+
 function App() {
 
   return (
-   <>
-      <Toaster position="top-right" reverseOrder={false} />
-    <Routes>
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
 
-      
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Singup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Singup />} />
+        <Route path="/forgot-password" element={<ForgatePage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
 
-      />
+        />
 
-      <Route
-        path="/admin"
-        element={
-          <AdminRoute>
-            <AdminLayout />
-          </AdminRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />  
-        <Route path="/admin/todos" element={<AllTodos />} /> 
-      </Route>
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="/admin/todos" element={<AllTodos />} />
+        </Route>
 
-      <Route
-        path="/todo/edit/:id"
-        element={
-          <ProtectedRoute>
-            <EditTodo />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/todo/new"
-        element={
-          <ProtectedRoute>
-            <CreateTodo />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-   </>
+        <Route
+          path="/todo/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditTodo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/todo/new"
+          element={
+            <ProtectedRoute>
+              <CreateTodo />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 

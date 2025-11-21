@@ -1,6 +1,70 @@
 import { UserModel } from "../model/userModel.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
+import sendEmail from "../config/sendEmail.js";
+
+// -------------------- FORGOT PASSWORD --------------------
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) return res.status(400).json({ msg: "User not found" });
+
+    // Create token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    user.resetToken = token;
+    user.resetTokenExpire = Date.now() + 15 * 60 * 1000;
+    await user.save();
+
+    const link = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
+    await sendEmail(
+      user.email,
+      "Password Reset",
+      `<p>Click the link to reset your password:</p>
+       <a href="${link}">${link}</a>`
+    );
+
+    res.json({ msg: "A reset link has been sent to your email." });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+// -------------------- RESET PASSWORD --------------------
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await UserModel.findOne({
+      _id: decoded.id,
+      resetToken: token,
+      resetTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!user)
+      return res.status(400).json({ msg: "Invalid or expired token" });
+
+    // Update password
+    user.password = await bcrypt.hash(password, 10);
+    user.resetToken = undefined;
+    user.resetTokenExpire = undefined;
+    await user.save();
+
+    res.json({ msg: "Password updated successfully!" });
+  } catch (err) {
+    res.status(400).json({ msg: "Invalid token" });
+  }
+};
+
+
 
 
 export const registerUser = async (req, res) => {
@@ -61,5 +125,9 @@ export const loginUser = async(req,res)=>{
 
 
 }
+
+
+
+
 
 

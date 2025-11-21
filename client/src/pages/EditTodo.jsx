@@ -51,7 +51,7 @@ function EditTodo() {
 
   return (
     <div className="max-w-lg w-full mx-auto p-4 sm:p-6 lg:p-8">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Create Todo</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Update Todo</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title */}
         <Input
